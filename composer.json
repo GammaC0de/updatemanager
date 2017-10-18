@@ -1,6 +1,7 @@
 {
     "require": {
-        "katzgrau/klogger": "1.0.*"
+        "katzgrau/klogger": "1.0.*",
+        "ext-sqlite3": "*"
     },
     "require-dev": {
         "satooshi/php-coveralls": "dev-master"
