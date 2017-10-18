@@ -1,8 +1,7 @@
 <?php
-require_once('PHPUnit/Autoload.php');
 require_once('lib/updatemanager.inc.php');
 
-class UpdateManagerTest extends PHPUnit_Framework_TestCase {
+class UpdateManagerTest extends \PHPUnit_Framework_TestCase {
     public function testSetupDB() {
         $l = null;
         $um = new UpdateManager($l);
