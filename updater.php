@@ -9,7 +9,7 @@ $starttime = time();
 $l = null;
 //$l = new Katzgrau\KLogger\Logger(LOGDIR);
 
-//if(php_sapi_name() != 'cli' && ((!isset($_GET['key'])) || (sha1(trim($_GET['key'])) != 'b7739cb242fe4e9506a6488d96de0b187fb170ae'))) {
+//if(php_sapi_name() != 'cli' && ((!isset($_GET['key'])) || (hash("sha256", trim($_GET['key'])) != '1a82915eac2eead7c2ea4ccd8e0517908ff2318f64da33df5c19f5d967f088ae'))) {
 //    $l->warning('Invalid key');
 //    exit('Invalid key. Exiting.');
 //}
