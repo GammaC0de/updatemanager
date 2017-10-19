@@ -15,7 +15,7 @@ install:
 - composer install --dev --no-interaction
 script:
 - vendor/bin/phpunit --version
-- sh -c tests/run_tests.sh
+- sh tests/run_tests.sh
 after_script:
 - php vendor/bin/coveralls -v
 before_deploy:
