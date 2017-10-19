@@ -11,6 +11,7 @@ script:
 - phpunit --version
 - vendor/bin/phpunit --version
 - tests/run_tests.sh
+- phpunit -c tests/phpunit.xml
 after_script:
 - php vendor/bin/coveralls -v
 before_deploy:
