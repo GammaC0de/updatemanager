@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once('lib/updatemanager.inc.php');
 
-class UpdateManagerTest extends PHPUnit_Framework_TestCase {
+class UpdateManagerTest extends TestCase {
     public function testSetupDB() {
         $l = null;
         $um = new UpdateManager($l);
