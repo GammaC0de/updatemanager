@@ -18,7 +18,7 @@ $l = null;
 print("Update process started<br>\n");
 
 $um = new UpdateManager($l);
-$um->update();
+$um->update(isset($_GET['dry_run']) && trim($_GET['dry_run'])) == '1');
 
 //$l->info('Update process finished');
 print("Update process finished<br>\n");
