@@ -13,9 +13,8 @@ script:
 after_script:
 - php vendor/bin/coveralls -v
 before_deploy:
-- git rm -f composer.phar README.md plugins.sqlite blacklist.txt .travis.yml manual_release.sh || (exit 0)
-- git rm -rf tests || (exit 0)
-- rm -rf data || (exit 0)
+- rm -f composer.phar README.md plugins.sqlite blacklist.txt .travis.yml manual_release.sh || (exit 0)
+- rm -rf tests data || (exit 0)
 - git commit -a --amend --no-edit || (exit 0)
 deploy:
   provider: heroku
@@ -26,4 +25,4 @@ deploy:
     repo: GammaC0de/updatemanager
     branch: master
     php: 7.1
-#  skip_cleanup: true
+  skip_cleanup: true
