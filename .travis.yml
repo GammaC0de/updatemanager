@@ -13,8 +13,9 @@ script:
 after_script:
 - php vendor/bin/coveralls -v
 before_deploy:
-- rm -f composer.* .gitattributes .gitignore README.md plugins.sqlite blacklist.txt .travis.yml || (exit 0)
-- rm -rf vendor tests data || (exit 0)
+- rm -f composer.phar README.md plugins.sqlite blacklist.txt .travis.yml manual_release.sh || (exit 0)
+- rm -rf vendor build tests data || (exit 0)
+- git commit --amend --no-edit || (exit 0)
 deploy:
   provider: heroku
   api_key:
