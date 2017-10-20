@@ -218,16 +218,21 @@ class UpdateManager {
         print("Plugin list created<br>\n");
 
         $this->db->close();
-        if ($this->git_updserver->dirty() && !$dry_run) {
-            rename(SQLITEDB_FILE, SERVER_REPO_PATH . SQLITEDB_FILE);
-            if ($this->push_server()) {
-                //$this->l->info('Server updated');
-                print("Server updated<br>\n");
+        if (!$dry_run) {
+            if ($this->git_updserver->dirty() || !file_exists(SERVER_REPO_PATH . SQLITEDB_FILE)) {
+                rename(SQLITEDB_FILE, SERVER_REPO_PATH . SQLITEDB_FILE);
+                if ($this->push_server()) {
+                    //$this->l->info('Server updated');
+                    print("Server updated<br>\n");
+                } else {
+                    //$this->l->info('No pending changes');
+                    print("No pending changes<br>\n");
+                }
             }
         }
         else {
-            //$this->l->info('No pending changes');
-            print("No pending changes<br>\n");
+            //$this->l->info('Dry run, not pushing');
+            print("Dry run, not pushing<br>\n");
         }
     }
 }
