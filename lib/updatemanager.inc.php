@@ -85,7 +85,7 @@ class UpdateManager {
             $path = "https://raw.githubusercontent.com/pyload/pyload/$this->last_commit/module/plugins/$type/$name";
         $content = file_get_contents($path);
         $status = preg_match('/__version__\s*=\s*[\'"]([^\'"]+)[\'"]/i', $content, $m);
-        if(!isset($m[1]) or $content==false) {
+        if(!$status || !isset($m[1]) || $content==false) {
             //$this->l->error("Unable to detect version for $type/$name");
             print("Unable to detect version for $type/$name<br>\n");
             return null;
@@ -113,7 +113,7 @@ class UpdateManager {
             $modules = array_filter($this->git_pyload->ls($this->last_commit, PLUGINS_PATH), $filter);
             foreach($modules as $module) {
                 list($type, $name) = $this->get_nametype($module);
-                if (is_null($type) or is_null($name))
+                if (is_null($type) || is_null($name))
                     continue;
                 //$this->l->info("New plugin $type/$name! Adding to the database");
                 print("New plugin $type/$name! Adding to the database<br>\n");
@@ -125,7 +125,7 @@ class UpdateManager {
             $modules = array_filter($this->git_pyload->diff($this->prev_commit, $this->last_commit), $filter, ARRAY_FILTER_USE_KEY);
             foreach($modules as $module=>$status) {
                 list($type, $name) = $this->get_nametype($module);
-                if (is_null($type) or is_null($name))
+                if (is_null($type) || is_null($name))
                     continue;
 
                 switch($status) {
@@ -218,8 +218,11 @@ class UpdateManager {
         print("Plugin list created<br>\n");
 
         $this->db->close();
-        if (!$dry_run) {
-            if ($this->git_updserver->dirty() || !file_exists(SERVER_REPO_PATH . SQLITEDB_FILE)) {
+        if ($this->git_updserver->dirty() || !file_exists(SERVER_REPO_PATH . SQLITEDB_FILE)) {
+            if (!$dry_run) {
+                //$this->l->info('Dry run, not pushing');
+                print("There are pending changes, dry run - not pushing<br>\n");
+            } else {
                 rename(SQLITEDB_FILE, SERVER_REPO_PATH . SQLITEDB_FILE);
                 if ($this->push_server()) {
                     //$this->l->info('Server updated');
@@ -229,10 +232,9 @@ class UpdateManager {
                     print("No pending changes<br>\n");
                 }
             }
-        }
-        else {
-            //$this->l->info('Dry run, not pushing');
-            print("Dry run, not pushing<br>\n");
+        } else {
+            //$this->l->info('No pending changes');
+            print("No pending changes<br>\n");
         }
     }
 }
