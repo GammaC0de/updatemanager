@@ -6,7 +6,7 @@ set_time_limit(0);
 
 $starttime = time();
 
-$l = null;
+$l = null; // Heroku has ephemeral filesystem
 //$l = new Katzgrau\KLogger\Logger(LOGDIR);
 
 //if(php_sapi_name() != 'cli' && ((!isset($_GET['key'])) || (hash("sha256", trim($_GET['key'])) != '1a82915eac2eead7c2ea4ccd8e0517908ff2318f64da33df5c19f5d967f088ae'))) {
@@ -17,8 +17,14 @@ $l = null;
 //$l->info('Update process started');
 print("Update process started<br>\n");
 
+$dry_run = isset($_GET['dry_run']) && trim($_GET['dry_run']) == '1' || php_sapi_name() == 'cli' && $argc > 1 && $argv[1] == '--dry-run';
+if ($dry_run) {
+    //$l->info('Update process started');
+    print("Dry run specified<br>\n");
+}
+
 $um = new UpdateManager($l);
-$um->update(isset($_GET['dry_run']) && trim($_GET['dry_run']) == '1');
+$um->update($dry_run);
 
 //$l->info('Update process finished');
 print("Update process finished<br>\n");
