@@ -7,7 +7,7 @@ if(php_sapi_name() != 'cli' && isset($_SERVER['HTTP_USER_AGENT']) && substr($_SE
     file_put_contents('php://stderr', "ref='$ref' branch='$branch'\n");
     if ($ref == $branch) {
         file_put_contents('php://stderr', '$_GET = ' . print_r($_GET, TRUE). "\n");
-        file_put_contents('php://stderr', '$_POST = ' . print_r($_POST, TRUE). "\n");
+        file_put_contents('php://stderr', '$_POST = ' . print_r(array_keys($_POST), TRUE). "\n");
         file_put_contents('php://stderr', '$_SERVER = ' . print_r($_SERVER, TRUE). "\n");
     }
     else {
