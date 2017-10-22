@@ -1,9 +1,15 @@
 <?php
 file_put_contents('php://stderr', "Logger started.\n");
-file_put_contents('php://stderr', '$_GET = ' . print_r($_GET, TRUE). "\n");
-file_put_contents('php://stderr', '$_POST = ' . print_r($_POST, TRUE). "\n");
-if (ftell(STDIN) != false)
-    file_put_contents('php://stderr','Body = ' . file_get_contents('php://stdin') . "\n");
-else
-    file_put_contents('php://stderr', "No input\n");
+if(php_sapi_name() != 'cli' && isset($_SERVER['HTTP_USER_AGENT']) && substr($_SERVER['HTTP_USER_AGENT'], 0, 16) == 'GitHub-Hookshot/') {
+    $json = json_decode($_POST['payload'], true);
+    if ($json['ref'] == 'refs/heads/' . PYLOAD_BRANCH) {
+        file_put_contents('php://stderr', '$_GET = ' . print_r($_GET, TRUE). "\n");
+        file_put_contents('php://stderr', '$_POST = ' . print_r($_POST, TRUE). "\n");
+        file_put_contents('php://stderr', '$_SERVER = ' . print_r($_SERVER, TRUE). "\n");
+    }
+    else {
+        file_put_contents('php://stderr', "Wrong brnach.\n");
+        exit(0);
+    }
+}
 ?>

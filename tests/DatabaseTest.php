@@ -1,9 +1,7 @@
 <?php
-use PHPUnit\Framework\TestCase;
-
 require_once('lib/database.inc.php');
 
-class DatabaseTest extends TestCase {
+class DatabaseTest extends PHPUnit\Framework\TestCase {
 
     public function testSetupDB() {
         $db = new umSQLite3('tests/testSetupDB.db');

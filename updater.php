@@ -14,6 +14,12 @@ $l = null; // Heroku has ephemeral filesystem
 //    exit('Invalid key. Exiting.');
 //}
 
+if(php_sapi_name() != 'cli' && isset($_SERVER['HTTP_USER_AGENT']) && substr($_SERVER['HTTP_USER_AGENT'], 0, 16) == 'GitHub-Hookshot/') {
+    $json = json_decode($_POST['payload'], true);
+    if ($json['ref'] != 'refs/heads/' . PYLOAD_BRANCH)
+        exit(0);
+}
+
 //$l->info('Update process started');
 print("Update process started<br>\n");
 

@@ -1,10 +1,12 @@
 <?php
 define('AUTH_FILE', getenv('HOME') . '/.netrc');
 
-define('PYLOAD_REPO_URL', 'https://github.com/pyload/pyload.git');
+//define('PYLOAD_REPO_URL', 'https://github.com/pyload/pyload.git');
+define('PYLOAD_REPO_URL', 'https://github.com/GammaC0de/pyload.git');
 define('PYLOAD_REPO_PATH', 'data/pyload-repo/');
 define('PYLOAD_BRANCH', 'stable');
 
+//define('SERVER_REPO_URL', 'https://github.com/pyload/updates.git');
 define('SERVER_REPO_URL', 'https://github.com/GammaC0de/GammaC0de.github.io.git');
 define('SERVER_REPO_PATH', 'data/server-repo/');
 
@@ -25,7 +27,7 @@ define('PYLOAD_REPO_URL', 'https://github.com/pyload/pyload.git');
 define('PYLOAD_REPO_PATH', 'data/pyload-repo/');
 define('PYLOAD_BRANCH', 'stable');
 
-define('SERVER_REPO_URL', 'https://github.com/GammaC0de/GammaC0de.github.io.git');
+define('SERVER_REPO_URL', 'https://github.com/pyload/updates.git');
 define('SERVER_REPO_PATH', 'data/server-repo/');
 
 define('PLUGINS_PATH', 'module/plugins/');
@@ -181,20 +183,23 @@ class UpdateManager {
             file_put_contents(VERSION_FILE, $version);
         }
 
-        $f = fopen(PLUGINLIST_FILE, 'w');
-        fwrite($f, "$version\nhttps://raw.githubusercontent.com/pyload/pyload/%(changeset)s/module/plugins/%(type)s/%(name)s\ntype|name|changeset|version");
+        $f1 = fopen(PLUGINLIST_FILE, 'w');
+        fwrite($f1, "$version\nhttps://raw.githubusercontent.com/pyload/pyload/%(changeset)s/module/plugins/%(type)s/%(name)s\ntype|name|changeset|version");
         $db_rows = $this->db->get_plugin_rows();
         while($row = $db_rows->fetchArray(SQLITE3_ASSOC)) {
-            fwrite($f, sprintf("\n%s|%s|%s|%s", $row['type'], $row['name'], $row['sha'], $row['version']));
+            fwrite($f1, sprintf("\n%s|%s|%s|%s", $row['type'], $row['name'], $row['sha'], $row['version']));
         }
 
-        fwrite($f, "\nBLACKLIST\n");
+        fwrite($f1, "\nBLACKLIST\n");
+        $f2 = fopen(BLACKLIST_FILE, 'w');
         $db_rows = $this->db->get_blacklist_rows();
         while($row = $db_rows->fetchArray(SQLITE3_ASSOC)) {
-            fwrite($f, sprintf("%s|%s\n", $row['type'], $row['name']));
+            fwrite($f1, sprintf("%s|%s\n", $row['type'], $row['name']));
+            fwrite($f2, sprintf("%s|%s\n", $row['type'], $row['name']));
         }
 
-        fclose($f);
+        fclose($f2);
+        fclose($f1);
     }
 
     public function push_server() {
@@ -219,7 +224,7 @@ class UpdateManager {
 
         $this->db->close();
         if ($this->git_updserver->dirty() || !file_exists(SERVER_REPO_PATH . SQLITEDB_FILE)) {
-            if (!$dry_run) {
+            if ($dry_run) {
                 //$this->l->info('Dry run, not pushing');
                 print("There are pending changes, dry run - not pushing<br>\n");
             } else {

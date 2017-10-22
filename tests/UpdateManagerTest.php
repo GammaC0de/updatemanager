@@ -1,9 +1,7 @@
 <?php
-use PHPUnit\Framework\TestCase;
-
 require_once('lib/updatemanager.inc.php');
 
-class UpdateManagerTest extends TestCase {
+class UpdateManagerTest extends PHPUnit\Framework\TestCase {
     public function testSetupDB() {
         $l = null;
         $um = new UpdateManager($l);
