@@ -13,7 +13,7 @@ if (php_sapi_name() != 'cli') {
     if (isset($_SERVER['HTTP_USER_AGENT']) && substr($_SERVER['HTTP_USER_AGENT'], 0, 16) == 'GitHub-Hookshot/') {
         if (!isset($_SERVER['HTTP_X_GITHUB_EVENT']) || $_SERVER['HTTP_X_GITHUB_EVENT'] != 'push') {
             //    $l->info('Not a push event');
-            exit("Not a push event<br>\n");
+            exit("Not a push event.");
         }
 
         $payload = $_POST['payload'];
@@ -22,38 +22,39 @@ if (php_sapi_name() != 'cli') {
         $payload = null;
 
     if (isset($_GET['key'])) {
-        if (hash("sha256", trim($_GET['key'])) != '1a82915eac2eead7c2ea4ccd8e0517908ff2318f64da33df5c19f5d967f088ae') {
+        if (hash("sha256", trim($_GET['key'])) != '49e4b829958ce1a36af08a0ff03b9897be3653cbd979a03651f2dd1bb3d98733') {
             //    $l->warning('Invalid Signature');
             header('HTTP/1.0 403 Forbidden');
-            exit('Invalid Signature. Exiting.');
+            exit('Invalid key. Exiting.');
         }
-    }
-    elseif ($payload != null) {
-        list($algo, $hmac) = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE'], 2) + array('', '');
-        if (!in_array($algo, hash_algos(), TRUE)) {
-            //    $l->warning("Hash algorithm '$algo' is not supported.);
-            header('HTTP/1.0 500 Internal server error');
-            exit("Hash algorithm '$algo' is not supported. Exiting.");
-        }
-        if (hash_hmac($algo, file_get_contents('php://input'), getenv('GITHUB_SECRET')) != $hmac) {
-            print("Calcultated HMAC: ". hash_hmac($algo, $payload, getenv('GITHUB_SECRET')) . " Got: $hmac\n");
-            //    $l->warning('Invalid Signature');
-            header('HTTP/1.0 403 Forbidden');
-            exit('Invalid Signature. Exiting.');
-        }
-    }
-    else {
-        //    $l->warning('Missing Signature');
-        header('HTTP/1.0 403 Forbidden');
-        exit('Missing Signature. Exiting.');
     }
 
     if ($payload != null) {
-        $json = json_decode($_POST['payload'], true);
+        if (!isset($_GET['key'])) {
+            list($algo, $hmac) = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE'], 2) + array('', '');
+            if (!in_array($algo, hash_algos(), TRUE)) {
+                //    $l->warning("Hash algorithm '$algo' is not supported.);
+                header('HTTP/1.0 500 Internal server error');
+                exit("Hash algorithm '$algo' is not supported. Exiting.");
+            }
+            $raw_post_data = file_get_contents('php://input');
+            if (hash_hmac($algo, $raw_post_data, getenv('GITHUB_SECRET')) != $hmac) {
+                //    $l->warning('Webhook secret does not match. Exiting.');
+                header('HTTP/1.0 403 Forbidden');
+                exit('Webhook secret does not match. Exiting.');
+            }
+        }
+
+        $json = json_decode($payload, true);
         if (!isset($json['ref']) || $json['ref'] != 'refs/heads/' . PYLOAD_BRANCH) {
             //    $l->info('Not our branch');
-            exit("Not our branch<br>\n");
+            exit('Not our branch.');
         }
+    }
+    else {
+        //    $l->warning('Missing webhook secret. Exiting.');
+        header('HTTP/1.0 403 Forbidden');
+        exit('Missing webhook secret. Exiting.');
     }
 }
 
