@@ -32,7 +32,7 @@ if (php_sapi_name() != 'cli') {
         if (hash_hmac('sha1', $payload, getenv('GITHUB_SECRET')) != $_SERVER['HTTP_X_HUB_SIGNATURE']) {
             //    $l->warning('Invalid Signature');
             header('HTTP/1.0 403 Forbidden');
-            print("Got Signature:" . $_SERVER['HTTP_X_HUB_SIGNATURE'])
+            print("Got Signature:" . $_SERVER['HTTP_X_HUB_SIGNATURE']);
             exit('Invalid Signature. Exiting.');
         }
     }
