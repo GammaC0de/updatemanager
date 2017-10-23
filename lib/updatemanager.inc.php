@@ -168,8 +168,9 @@ class UpdateManager {
             if (end($modules) == '')
                 $modules = array_slice($modules, 0, -1);
             foreach($modules as $module) {
-                list($type, $name) = explode('|', $module);
-                $this->db->remove_plugin($type, $name);
+                list($type, $name) = explode('|', $module, 2) + array('', '');
+                if ($type != '' && $name != '')
+                    $this->db->remove_plugin($type, $name);
             }
         }
 

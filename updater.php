@@ -29,10 +29,15 @@ if (php_sapi_name() != 'cli') {
         }
     }
     elseif ($payload != null) {
-        if (hash_hmac('sha1', $payload, getenv('GITHUB_SECRET')) != $_SERVER['HTTP_X_HUB_SIGNATURE']) {
+        list($algo, $hmac) = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE'], 2) + array('', '');
+        if (!in_array($algo, hash_algos(), TRUE)) {
+            //    $l->warning("Hash algorithm '$algo' is not supported.);
+            header('HTTP/1.0 500 Internal server error');
+            exit("Hash algorithm '$algo' is not supported. Exiting.");
+        }
+        if (hash_hmac($algo, $payload, getenv('GITHUB_SECRET')) != $hmac) {
             //    $l->warning('Invalid Signature');
             header('HTTP/1.0 403 Forbidden');
-            print("Got Signature:" . $_SERVER['HTTP_X_HUB_SIGNATURE']);
             exit('Invalid Signature. Exiting.');
         }
     }
