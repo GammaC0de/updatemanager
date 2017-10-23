@@ -52,8 +52,8 @@ class GitCMD {
         return true;
     }
 
-    public function pull() {
-        exec("cd $this->git_path; git reset --hard origin/$this->branch; git pull -s recursive -X theirs", $output, $status);
+    public function pull($remote="origin") {
+        exec("cd $this->git_path; git reset --hard $remote/$this->branch; git pull -s recursive -X theirs", $output, $status);
         if($status) {
             //$this->l->error('An error occurred fetching the git repo. Exiting.');
             exit("An error occurred fetching the git repo. Exiting.<br>\n");
