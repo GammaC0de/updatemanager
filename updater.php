@@ -17,18 +17,18 @@ if (php_sapi_name() != 'cli') {
 
     if (isset($_GET['key']))
         if (hash("sha256", trim($_GET['key'])) != '1a82915eac2eead7c2ea4ccd8e0517908ff2318f64da33df5c19f5d967f088ae') {
-            //    $l->warning('Invalid key');
+            //    $l->warning('Invalid Signature');
             exit('Invalid Signature. Exiting.');
         }
     elseif ($payload != null) {
         if (hash_hmac('sha1', $payload, getenv('GITHUB_SECRET')) != $_SERVER['HTTP_X_HUB_SIGNATURE']) {
-            //    $l->warning('Invalid key');
+            //    $l->warning('Invalid Signature');
             exit('Invalid Signature. Exiting.');
         }
     }
     else {
-        //    $l->warning('Invalid key');
-        exit('Invalid Signature. Exiting.');
+        //    $l->warning('Missing Signature');
+        exit('Missing Signature. Exiting.');
     }
 
     if ($payload != null) {
