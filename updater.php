@@ -35,8 +35,8 @@ if (php_sapi_name() != 'cli') {
             header('HTTP/1.0 500 Internal server error');
             exit("Hash algorithm '$algo' is not supported. Exiting.");
         }
-        if (hash_hmac($algo, $payload, getenv('GITHUB_SECRET')) != $hmac) {
-            print("Calcultated HMAC: ". hash_hmac($algo, $payload, getenv('GITHUB_SECRET')) . "Got: $hmac\n");
+        if (hash_hmac($algo, file_get_contents('php://input'), getenv('GITHUB_SECRET')) != $hmac) {
+            print("Calcultated HMAC: ". hash_hmac($algo, $payload, getenv('GITHUB_SECRET')) . " Got: $hmac\n");
             //    $l->warning('Invalid Signature');
             header('HTTP/1.0 403 Forbidden');
             exit('Invalid Signature. Exiting.');
