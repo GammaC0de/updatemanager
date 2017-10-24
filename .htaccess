@@ -2,5 +2,5 @@ RedirectMatch 403 ^/lib/.*$
 Redirect 301 /index.html https://github.com/pyload/updates/raw/master/plugins.txt
 Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
 
-SSLOptions +StrictRequire
-SSLRequireSSL
+#SSLOptions +StrictRequire
+#SSLRequireSSL
