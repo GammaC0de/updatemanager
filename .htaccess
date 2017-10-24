@@ -1,11 +1,11 @@
-#Redirect 301 /index.html https://github.com/pyload/updates/raw/master/plugins.txt
-#Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
-#Redirect 301 / https://github.com/pyload/updates/raw/master/plugins.txt
+Redirect 301 /index.html https://github.com/pyload/updates/raw/master/plugins.txt
+Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
+Redirect 301 / https://github.com/pyload/updates/raw/master/plugins.txt
 
 RewriteEngine On
 RewriteBase /
+RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^.+ - [F,L]
 RewriteCond %{REQUEST_URI} ^(?!/updater.php$).*$
 RewriteRule ^(.+) - [R=404,L]
-
