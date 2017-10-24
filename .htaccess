@@ -1,6 +1,6 @@
-SSLOptions +StrictRequire
-SSLRequireSSL
-
-RedirectMatch 403 ^/lib/.*$
 Redirect 301 /index.html https://github.com/pyload/updates/raw/master/plugins.txt
 Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
+
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{REQUEST_URI} ^(?!/updater.php$)
+RewriteRule ^  - [R=403,L]
