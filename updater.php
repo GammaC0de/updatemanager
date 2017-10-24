@@ -10,6 +10,7 @@ $l = null; // Heroku has ephemeral filesystem
 //$l = new Katzgrau\KLogger\Logger(LOGDIR);
 
 if (php_sapi_name() != 'cli') {
+    header('Content-Type: text/plain')
     if (isset($_SERVER['HTTP_USER_AGENT']) && substr($_SERVER['HTTP_USER_AGENT'], 0, 16) == 'GitHub-Hookshot/') {
         if (!isset($_SERVER['HTTP_X_GITHUB_EVENT']) || $_SERVER['HTTP_X_GITHUB_EVENT'] != 'push') {
             //    $l->info('Not a push event');
