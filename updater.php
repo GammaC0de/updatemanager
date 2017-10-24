@@ -44,7 +44,7 @@ if (php_sapi_name() != 'cli') {
                 exit("Hash algorithm '$algo' is not supported. Exiting.");
             }
             $raw_post_data = file_get_contents('php://input');
-            if (hash_hmac($algo, $raw_post_data, getenv('GITHUB_SECRET')) != $hmac) {
+            if (hash_hmac($algo, $raw_post_data, getenv('WEBHOOK_SECRET')) != $hmac) {
                 //    $l->warning('Webhook secret does not match. Exiting.');
                 header('HTTP/1.0 403 Forbidden');
                 exit('Webhook secret does not match. Exiting.');
