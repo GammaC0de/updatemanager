@@ -2,7 +2,7 @@
 #Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
 #Redirect 301 / https://github.com/pyload/updates/raw/master/plugins.txt
 
-​RewriteEngine On
+RewriteEngine On
 RewriteBase /
 RewriteCond %{HTTPS} off
 RewriteRule ^.+ - [F,L]
