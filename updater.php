@@ -65,22 +65,22 @@ if (php_sapi_name() != 'cli') {
 }
 
 //$l->info('Update process started');
-print("Update process started<br>\n");
+print("Update process started\n");
 
 $dry_run = isset($_GET['dry_run']) && trim($_GET['dry_run']) == '1' || php_sapi_name() == 'cli' && $argc > 1 && $argv[1] == '--dry-run';
 if ($dry_run) {
     //$l->info('Update process started');
-    print("Dry run specified<br>\n");
+    print("Dry run specified\n");
 }
 
 $um = new UpdateManager($l);
 $um->update($dry_run);
 
 //$l->info('Update process finished');
-print("Update process finished<br>\n");
+print("Update process finished\n");
 
 $seconds = time() - $starttime;
 $mins = floor($seconds / 60 % 60);
 $secs = floor($seconds % 60);
-print("Elapsed time: $mins minutes and $secs seconds<br>\n");
+print("Elapsed time: $mins minutes and $secs seconds\n");
 ?>
