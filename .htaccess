@@ -1,6 +1,5 @@
 Redirect 301 /index.html https://github.com/pyload/updates/raw/master/plugins.txt
 Redirect 301 /index.php https://github.com/pyload/updates/raw/master/plugins.txt
-Redirect 301 / https://github.com/pyload/updates/raw/master/plugins.txt
 
 ErrorDocument 410 "<html><body>Please use HTTPS.</body></html>"
 
