@@ -4,8 +4,8 @@
 
 RewriteEngine On
 RewriteBase /
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule ^.+ - [F,L]
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteRule ^.+ - [F,L]
 RewriteCond %{REQUEST_URI} ^(?!/updater.php$).*$
 RewriteRule ^(.+) - [R=404,L]
 
