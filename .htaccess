@@ -4,7 +4,7 @@
 
 RewriteEngine On
 RewriteBase /
-RewriteCond %{HTTPS} off
-RewriteRule ^.+$ - [F,L]
-RewriteCond %{REQUEST_URI} ^(?!/updater\.php$) [NC]
-RewriteRule ^.+$ - [F,L]
+RewriteCond %{HTTPS} off [C]
+RewriteRule ^(.+) - [F,L]
+RewriteCond %{REQUEST_URI} ^(?!/updater.php$).*$ [C]
+RewriteRule ^(.+) - [F,L]
