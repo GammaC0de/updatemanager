@@ -148,8 +148,8 @@ class UpdateManager {
                         break;
 
                     case 'D':
-                        //$this->l->info("Removing $type/$name");
-                        print("Removing $type/$name\n");
+                        //$this->l->info("Deleted plugin $type/$name! Removing from the database");
+                        print("Deleted plugin $type/$name! Removing from the database\n");
                         $this->db->remove_plugin($type, $name);
                         break;
 
