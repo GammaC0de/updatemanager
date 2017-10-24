@@ -86,8 +86,13 @@ class UpdateManager {
         if (!file_exists($path))
             $path = "https://raw.githubusercontent.com/pyload/pyload/$this->last_commit/module/plugins/$type/$name";
         $content = file_get_contents($path);
+        if ($content == false) {
+            //$this->l->error("Unable to detect version for $type/$name\nFailed to download $path\n");
+            print("Unable to detect version for $type/$name\nFailed to download file $path\n");
+            return null;
+        }
         $status = preg_match('/__version__\s*=\s*[\'"]([^\'"]+)[\'"]/i', $content, $m);
-        if(!$status || !isset($m[1]) || $content==false) {
+        if(!$status || !isset($m[1])) {
             //$this->l->error("Unable to detect version for $type/$name");
             print("Unable to detect version for $type/$name\n");
             return null;
@@ -117,10 +122,16 @@ class UpdateManager {
                 list($type, $name) = $this->get_nametype($module);
                 if (is_null($type) || is_null($name))
                     continue;
-                //$this->l->info("New plugin $type/$name! Adding to the database");
-                print("New plugin $type/$name! Adding to the database\n");
                 $file_version = $this->get_plugin_version($type, $name);
-                $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
+                if (!is_null($file_version)) {
+                    //$this->l->info("New plugin $type/$name! Adding to the database");
+                    print("New plugin $type/$name! Adding to the database\n");
+                    $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
+                }
+                else {
+                    //$this->l->info("Plugin $type/$name NOT added to the database!");
+                    print("Plugin $type/$name NOT added to the database!\n");
+                }
             }
         }
         else {
@@ -132,18 +143,30 @@ class UpdateManager {
 
                 switch($status) {
                     case 'A':
-                        //$this->l->info("New plugin $type/$name! Adding to the database");
-                        print("New plugin $type/$name! Adding to the database\n");
                         $file_version = $this->get_plugin_version($type, $name);
-                        $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
+                        if (!is_null($file_version)) {
+                            $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
+                            //$this->l->info("New plugin $type/$name! Adding to the database");
+                            print("New plugin $type/$name! Adding to the database\n");
+                        }
+                        else {
+                            //$this->l->info("Plugin $type/$name NOT added to the database!");
+                            print("Plugin $type/$name NOT added to the database!\n");
+                        }
                         break;
 
                     case 'M':
                         $file_version = $this->get_plugin_version($type, $name);
-                        if ($this->db->plugin_exists($type, $name, $file_version) == 1) {
-                            //$this->l->info("$type/$name updated to $file_version");
-                            print("$type/$name updated to $file_version\n");
-                            $this->db->update_plugin($type, $name, $this->last_commit, $file_version);
+                        if (!is_null($file_version)) {
+                            if ($this->db->plugin_exists($type, $name, $file_version) == 1) {
+                                //$this->l->info("$type/$name updated to $file_version");
+                                print("$type/$name updated to $file_version\n");
+                                $this->db->update_plugin($type, $name, $this->last_commit, $file_version);
+                            }
+                        }
+                        else {
+                            //$this->l->info("Plugin $type/$name update discarded!");
+                            print("Plugin $type/$name update discarded!\n");
                         }
                         break;
 
