@@ -1,9 +1,10 @@
 <?php
 require_once('lib/updatemanager.inc.php');
+require_once('lib/database.inc.php');
 
 class UpdateManagerTest extends PHPUnit\Framework\TestCase {
     public function testSetupDB() {
-        $l = null;
+        $l = new \Logger();
         $um = new UpdateManager($l);
         $um->update(true);
 

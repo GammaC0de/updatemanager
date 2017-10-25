@@ -18,8 +18,6 @@ define('PLUGINLIST_FILE', SERVER_REPO_PATH . 'plugins.txt');
 define('BLACKLIST_FILE', SERVER_REPO_PATH . 'blacklist.txt');
 define('VERSION_FILE', SERVER_REPO_PATH . 'VERSION');
 
-define('LOGDIR', 'logs');
-
 /* Constants for local test env
 define('AUTH_FILE', getenv('HOME') . '/.netrc');
 
@@ -65,14 +63,12 @@ class UpdateManager {
             copy(SERVER_REPO_PATH . SQLITEDB_FILE, SQLITEDB_FILE);
         $this->db = new umSQLite3(SQLITEDB_FILE);
         $this->prev_commit = $this->db->get_prev_commit();
-        //$this->l->info("Prev commit: $this->prev_commit");
-        printf("Prev commit: %s\n", is_null($this->prev_commit) ? "None" : $this->prev_commit);
+        $this->l->info("Prev commit: " . (is_null($this->prev_commit) ? "None" : $this->prev_commit));
 
         $this->git_pyload = new GitCMD($l, PYLOAD_REPO_URL, PYLOAD_REPO_PATH, PYLOAD_BRANCH, !is_null($this->prev_commit));
         $this->last_commit = $this->git_pyload->last_commit();
 
-        //$this->l->info("Last commit: $this->last_commit");
-        print("Last commit: $this->last_commit\n");
+        $this->l->info("Last commit: $this->last_commit");
     }
 
     function __destruct() {
@@ -87,14 +83,12 @@ class UpdateManager {
             $path = "https://raw.githubusercontent.com/pyload/pyload/$this->last_commit/module/plugins/$type/$name";
         $content = file_get_contents($path);
         if ($content == false) {
-            //$this->l->error("Unable to detect version for $type/$name\nFailed to download $path\n");
-            print("Unable to detect version for $type/$name\nFailed to download file $path\n");
+            $this->l-error("Unable to detect version for $type/$name\nFailed to download file $path");
             return null;
         }
         $status = preg_match('/__version__\s*=\s*[\'"]([^\'"]+)[\'"]/i', $content, $m);
         if(!$status || !isset($m[1])) {
-            //$this->l->error("Unable to detect version for $type/$name");
-            print("Unable to detect version for $type/$name\n");
+            $this->l-error("Unable to detect version for $type/$name");
             return null;
         }
         else {
@@ -103,9 +97,8 @@ class UpdateManager {
     }
 
     private function get_nametype($module) {
-        if (preg_match('~' . PLUGINS_PATH . '(.+?)/(.+)~', $module, $m)  == 0) {
-            //$this->l->error(Unable to detect type or name for mosule $module\n");
-            print("Unable to detect type or name for mosule $module\n");
+        if (preg_match('~' . PLUGINS_PATH . '(.+?)/(.+)~', $module, $m)  != 1) {
+            $this->l-error("Unable to detect type or name for mosule $module");
             return array(null, null);
         }
         else
@@ -124,13 +117,11 @@ class UpdateManager {
                     continue;
                 $file_version = $this->get_plugin_version($type, $name);
                 if (!is_null($file_version)) {
-                    //$this->l->info("New plugin $type/$name! Adding to the database");
-                    print("New plugin $type/$name! Adding to the database\n");
+                    $this->l->info("New plugin $type/$name! Adding to the database.");
                     $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
                 }
                 else {
-                    //$this->l->info("Plugin $type/$name NOT added to the database!");
-                    print("Plugin $type/$name NOT added to the database!\n");
+                    $this->l->warning("Plugin $type/$name NOT added to the database!");
                 }
             }
         }
@@ -146,12 +137,10 @@ class UpdateManager {
                         $file_version = $this->get_plugin_version($type, $name);
                         if (!is_null($file_version)) {
                             $this->db->insert_plugin($type, $name, $this->last_commit, $file_version);
-                            //$this->l->info("New plugin $type/$name! Adding to the database");
-                            print("New plugin $type/$name! Adding to the database\n");
+                            $this->l->info("New plugin $type/$name! Adding to the database.");
                         }
                         else {
-                            //$this->l->info("Plugin $type/$name NOT added to the database!");
-                            print("Plugin $type/$name NOT added to the database!\n");
+                            $this->l->warning("Plugin $type/$name NOT added to the database!");
                         }
                         break;
 
@@ -159,26 +148,22 @@ class UpdateManager {
                         $file_version = $this->get_plugin_version($type, $name);
                         if (!is_null($file_version)) {
                             if ($this->db->plugin_exists($type, $name, $file_version) == 1) {
-                                //$this->l->info("$type/$name updated to $file_version");
-                                print("$type/$name updated to $file_version\n");
+                                $this->l->info("$type/$name updated to $file_version");
                                 $this->db->update_plugin($type, $name, $this->last_commit, $file_version);
                             }
                         }
                         else {
-                            //$this->l->info("Plugin $type/$name update discarded!");
-                            print("Plugin $type/$name update discarded!\n");
+                            $this->l->warning("Plugin $type/$name update discarded!");
                         }
                         break;
 
                     case 'D':
-                        //$this->l->info("Deleted plugin $type/$name! Removing from the database");
-                        print("Deleted plugin $type/$name! Removing from the database\n");
+                        $this->l->info("Deleted plugin $type/$name! Removing from the database.");
                         $this->db->remove_plugin($type, $name);
                         break;
 
                     default:
-                        //$this->l->warning("Unknown file status '$status' for file $type/$name");
-                        print("Unknown file status '$status' for file $type/$name\n");
+                        $this->l->warning("Unknown file status '$status' for file $type/$name.");
                         break;
                 }
             }
@@ -227,7 +212,7 @@ class UpdateManager {
     }
 
     public function push_server() {
-        $this->git_updserver->set_ident("pyLoadUpdater", "pyLoadUpdater@users.noreply.github.com");
+        $this->git_updserver->set_ident(getenv('GIT_USER'), getenv('GIT_USER') . "@users.noreply.github.com");
         if ($this->git_updserver->commit()) {
             $this->git_updserver->push();
             return true;
@@ -238,32 +223,26 @@ class UpdateManager {
 
     public function update($dry_run=false) {
         $this->update_db();
-        //$this->info('DB update completed');
-        print("DB update completed\n");
+        $this->l->info("DB update completed.");
 
         // The DB is now updated! Let's create the static file.
         $this->write_static();
-        //$this->l->info('Plugin list created');
-        print("Plugin list created\n");
+        $this->l->info("Plugin list created.");
 
         $this->db->close();
         if ($this->git_updserver->dirty() || !file_exists(SERVER_REPO_PATH . SQLITEDB_FILE)) {
             if ($dry_run) {
-                //$this->l->info('Dry run, not pushing');
-                print("There are pending changes, dry run - not pushing\n");
+                $this->l->info("There are pending changes, dry run - not pushing.");
             } else {
                 rename(SQLITEDB_FILE, SERVER_REPO_PATH . SQLITEDB_FILE);
                 if ($this->push_server()) {
-                    //$this->l->info('Server updated');
-                    print("Server updated\n");
+                    $this->l->info("Server updated.");
                 } else {
-                    //$this->l->info('No pending changes');
-                    print("No pending changes\n");
+                    $this->l->info("No pending changes.");
                 }
             }
         } else {
-            //$this->l->info('No pending changes');
-            print("No pending changes\n");
+            $this->l->info("No pending changes.");
         }
     }
 }

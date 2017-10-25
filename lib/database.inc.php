@@ -89,12 +89,14 @@ class umSQLite3 extends SQLite3 {
     }
 
     public function get_plugin_rows() {
-        $r = $this->query('SELECT * FROM plugins ORDER BY type, name ASC');
+        $r = $this->query('SELECT * FROM plugins
+                           ORDER BY type, name ASC');
         return $r;
     }
 
     public function get_blacklist_rows() {
-        $r = $this->query('SELECT * FROM blacklist ORDER BY type, UPPER(name) ASC');
+        $r = $this->query('SELECT * FROM blacklist
+                           ORDER BY type, UPPER(name) ASC');
         return $r;
     }
 }
