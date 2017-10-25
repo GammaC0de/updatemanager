@@ -11,6 +11,7 @@ class Logger
 
     function __construct()
     {
+        print ("php_sapi_name() =" . php_sapi_name());
         $this->cli = php_sapi_name() == 'cli';
         $this->l = getenv('DYNO') == false  && !$this->cli ? new Katzgrau\KLogger\Logger(LOGDIR) : null;
     }
