@@ -26,7 +26,7 @@ class GitCMD {
     public function gitclone() {
         exec("git clone -b $this->branch $this->repo $this->git_path", $output, $status);
         if($status) {
-            $this->l->error('An error occurred cloning the git repo. Exiting.');
+            $this->l->error("An error occurred cloning the git repo. Exiting.");
             exit(3);
         }
     }
@@ -34,7 +34,7 @@ class GitCMD {
     public function shallow_clone($depth=50) {
         exec("git clone -n --depth=$depth -b $this->branch $this->repo $this->git_path", $output, $status);
         if($status) {
-            $this->l->error('An error occurred cloning the git repo. Exiting.');
+            $this->l->error("An error occurred cloning the git repo. Exiting.");
             exit(3);
         }
     }
@@ -46,7 +46,7 @@ class GitCMD {
     public function push($remote="origin") {
         exec("cd $this->git_path; git push $remote $this->branch", $output, $status);
         if($status) {
-            $this->l->error('An error occurred pushing to the git repo. Exiting.');
+            $this->l->error("An error occurred pushing to the git repo. Exiting.");
             exit(3);
         }
         return true;
@@ -55,7 +55,7 @@ class GitCMD {
     public function pull($remote="origin") {
         exec("cd $this->git_path; git reset --hard $remote/$this->branch; git pull -s recursive -X theirs", $output, $status);
         if($status) {
-            $this->l->error('An error occurred fetching the git repo. Exiting.');
+            $this->l->error("An error occurred fetching the git repo. Exiting.");
             exit(0);
         }
     }
@@ -63,7 +63,7 @@ class GitCMD {
     public function set_ident($name, $email) {
         exec("cd $this->git_path; git config user.name \"$name\"; git config user.email \"$email\"", $output, $status);
         if($status) {
-            $this->l->error('An error occurred committing to the git repo. Exiting.');
+            $this->l->error("An error occurred committing to the git repo. Exiting.");
             exit(3);
         }
     }
@@ -77,7 +77,7 @@ class GitCMD {
                 $this->l->info("No changes to commit.");
                 return false;
             default:
-                $this->l->error('An error occurred committing to the git repo. Exiting.');
+                $this->l->error("An error occurred committing to the git repo. Exiting.");
                 exit(3);
         }
     }

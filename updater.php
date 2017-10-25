@@ -17,7 +17,7 @@ if (php_sapi_name() != 'cli') {
             exit(0);
         }
         if (!isset($_POST['payload'])) {
-            $l->error('No payload. Exiting.');
+            $l->error("No payload. Exiting.");
             header('HTTP/1.0 400 Bad Request');
             exit(1);
         }
@@ -45,7 +45,7 @@ if (php_sapi_name() != 'cli') {
             }
             $raw_post_data = file_get_contents('php://input');
             if (hash_hmac($algo, $raw_post_data, getenv('WEBHOOK_SECRET')) != $hmac) {
-                $l->error('Webhook secret does not match. Exiting.');
+                $l->error("Webhook secret does not match. Exiting.");
                 header('HTTP/1.0 403 Forbidden');
                 exit(1);
             }
@@ -59,26 +59,26 @@ if (php_sapi_name() != 'cli') {
             exit(0);
         }
 
-        if ($json['repository']['git_url'] == PYLOAD_REPO_URL) {
+        if ($json['repository']['clone_url'] == PYLOAD_REPO_URL) {
             if (!isset($json['ref']) || $json['ref'] != 'refs/heads/' . PYLOAD_BRANCH) {
                 $l->info('Not our branch.');
                 exit(0);
             }
         }
-        elseif ($json['repository']['git_url'] == SERVER_REPO_URL) {
+        elseif ($json['repository']['clone_url'] == SERVER_REPO_URL) {
             if (!isset($json['ref']) || $json['ref'] != 'refs/heads/master') {
                 $l->info('Not our branch.');
                 exit(0);
             }
         }
         else {
-            $l->error('Unknown repository. Exiting.');
+            $l->error("Unknown repository. Exiting.");
             header('HTTP/1.0 403 Forbidden');
             exit(1);
         }
     }
     elseif (!$key) {
-        $l->error('Missing webhook secret. Exiting.');
+        $l->error("Missing webhook secret. Exiting.");
         header('HTTP/1.0 403 Forbidden');
         exit(1);
     }
