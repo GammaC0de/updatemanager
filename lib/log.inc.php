@@ -16,51 +16,51 @@ class Logger
     }
 
     public function debug($msg) {
-        file_put_contents('php://output', $msg . PHP_EOL);
-        error_log($msg);
+        print($msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                file_put_contents('php://stderr', $msg . PHP_EOL);
+                error_log($msg);
             }
             else {
                 $this->l->debug($msg);
             }
+        flush();
     }
 
     public function info($msg) {
-        file_put_contents('php://output', $msg . PHP_EOL);
-        error_log($msg);
+        print($msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                file_put_contents('php://stderr', $msg . PHP_EOL);
+                error_log($msg);
             }
             else {
                 $this->l->info($msg);
             }
+        flush();
     }
 
     public function warning($msg) {
-        file_put_contents('php://output', $msg . PHP_EOL);
-        error_log($msg);
+        print($msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                file_put_contents('php://stderr', $msg . PHP_EOL);
+                error_log($msg);
             }
             else {
                 $this->l->warning($msg);
             }
+        flush();
     }
 
     public function error($msg) {
-        file_put_contents('php://output', $msg . PHP_EOL);
-        error_log($msg);
+        print($msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                file_put_contents('php://stderr', $msg . PHP_EOL);
+                error_log($msg);
             }
             else {
                 $this->l->error($msg);
             }
+        flush();
     }
 }
 ?>
