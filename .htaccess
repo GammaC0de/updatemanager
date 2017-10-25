@@ -10,5 +10,3 @@ RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^.+ - [G,L]
 RewriteCond %{REQUEST_URI} ^(?!/updater.php$).*$
 RewriteRule ^(.+) - [R=404,L]
-
-php_value output_buffering Off
