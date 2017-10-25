@@ -16,10 +16,10 @@ class Logger
     }
 
     public function debug($msg) {
-        fprintf(STDOUT, $msg . PHP_EOL);
+        fwrite(STDOUT, $msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                fprintf(STDERR, $msg . PHP_EOL);
+                fwrite(STDERR, $msg . PHP_EOL);
             }
             else {
                 $this->l->debug($msg);
@@ -27,10 +27,10 @@ class Logger
     }
 
     public function info($msg) {
-        fprintf(STDOUT, $msg . PHP_EOL);
+        fwrite(STDOUT, $msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                fprintf(STDERR, $msg . PHP_EOL);
+                fwrite(STDERR, $msg . PHP_EOL);
             }
             else {
                 $this->l->info($msg);
@@ -38,10 +38,10 @@ class Logger
     }
 
     public function warning($msg) {
-        fprintf(STDOUT, $msg . PHP_EOL);
+        fwrite(STDOUT, $msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                fprintf(STDERR, $msg . PHP_EOL);
+                fwrite(STDERR, $msg . PHP_EOL);
             }
             else {
                 $this->l->warning($msg);
@@ -49,10 +49,10 @@ class Logger
     }
 
     public function error($msg) {
-        fprintf(STDOUT, $msg . PHP_EOL);
+        fwrite(STDOUT, $msg . PHP_EOL);
         if (!$this->cli)
             if (is_null($this->l)) {
-                fprintf(STDERR, $msg . PHP_EOL);
+                fwrite(STDERR, $msg . PHP_EOL);
             }
             else {
                 $this->l->error($msg);
