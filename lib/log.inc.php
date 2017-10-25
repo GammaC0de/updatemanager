@@ -11,13 +11,13 @@ class Logger
 
     function __construct()
     {
-        ob_implicit_flush(1);
         $this->cli = php_sapi_name() == 'cli';
         $this->l = getenv('DYNO') == false  && !$this->cli ? new Katzgrau\KLogger\Logger(LOGDIR) : null;
     }
 
     public function debug($msg) {
         file_put_contents('php://output', $msg . PHP_EOL);
+        error_log($msg);
         if (!$this->cli)
             if (is_null($this->l)) {
                 file_put_contents('php://stderr', $msg . PHP_EOL);
@@ -29,6 +29,7 @@ class Logger
 
     public function info($msg) {
         file_put_contents('php://output', $msg . PHP_EOL);
+        error_log($msg);
         if (!$this->cli)
             if (is_null($this->l)) {
                 file_put_contents('php://stderr', $msg . PHP_EOL);
@@ -40,6 +41,7 @@ class Logger
 
     public function warning($msg) {
         file_put_contents('php://output', $msg . PHP_EOL);
+        error_log($msg);
         if (!$this->cli)
             if (is_null($this->l)) {
                 file_put_contents('php://stderr', $msg . PHP_EOL);
@@ -51,6 +53,7 @@ class Logger
 
     public function error($msg) {
         file_put_contents('php://output', $msg . PHP_EOL);
+        error_log($msg);
         if (!$this->cli)
             if (is_null($this->l)) {
                 file_put_contents('php://stderr', $msg . PHP_EOL);

@@ -3,7 +3,6 @@ require('vendor/autoload.php');
 require_once('lib/updatemanager.inc.php');
 require_once('lib/log.inc.php');
 
-phpinfo();
 set_time_limit(0);
 
 $starttime = time();
