@@ -1,13 +1,11 @@
 <?php
 define('AUTH_FILE', getenv('HOME') . '/.netrc');
 
-//define('PYLOAD_REPO_URL', 'https://github.com/pyload/pyload.git');
-define('PYLOAD_REPO_URL', 'https://github.com/GammaC0de/pyload.git');
+define('PYLOAD_REPO_URL', 'https://github.com/pyload/pyload.git');
 define('PYLOAD_REPO_PATH', 'data/pyload-repo/');
 define('PYLOAD_BRANCH', 'stable');
 
-//define('SERVER_REPO_URL', 'https://github.com/pyload/updates.git');
-define('SERVER_REPO_URL', 'https://github.com/GammaC0de/GammaC0de.github.io.git');
+define('SERVER_REPO_URL', 'https://github.com/pyload/updates.git');
 define('SERVER_REPO_PATH', 'data/server-repo/');
 
 define('PLUGINS_PATH', 'module/plugins/');

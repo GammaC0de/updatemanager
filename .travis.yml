@@ -19,10 +19,10 @@ before_deploy:
 deploy:
   provider: heroku
   api_key:
-    secure: G05KJ6kA9hY2n+BXN95dpj2iBjBFSbuidLRCpPw6T1WKlWsJqqbZOsk4t+UEXe5ZYOdXI+Af4TOVKLGuYo6cUNotWpQG5cRX0qcbX40r0hy0wU4WUJFyvsBwnFr7AroTzGUbZRFwzloC+f+9eaW+nmBkOSfLXcG27OUjSeaDtljIFvUNg789u2GflOHBBGO3hue7cGfd/EWZ0YQU0tgc1jX+jknjoaVErre3IzhH0JpCMCYklxI6r0thxIrageXZ7YsvPDDZUHjDxM0hxk1GgaDIAHm6bMEkWaG99izS+7Q6Rrjjd9vKm+dxfDzDVc2otapnVvwtV83+An84HGQedwM/5ThnGXAibaDWpchKDG+mxKZI2NJb6vUUStWoQTAh7VmouAwb4TTFbl4VdC9rV5z/7exJjlC3ZgN07nBUKn28GMrupxrWFffycIrjLChTwod7GOhLF9p3XIRZUs5o165uS0LqyYK6GyvY7lLfstjjJQYHav0jDoQe13rQNEoqydJ5ZCErOku1v+Wv8osANqGysnduaSO34cLGmhk4BQMN7ECBZJWaoBnzOZqMF0i1CqL09jJGLL/ch0665X6pm946J/+I25FQ/05etceR2NqIIoid9sxMXELHeWAZOm2UpdRYtquVr3rRIOH5+2bgPJPt2Wm78ZnIdDhFLjMAzD4=
+    secure: ekkTT7qgQwlIauXVoFU/A7hXHJ7oqIM/o+KYCr4H1be3BvxIJznHq0VULODTGqTJKYfiknwYquWuiGa5XvNbBnrsWChV2x9Uf/IrsphH18+BAOBSg36ZBmTfhUdcPOi2wGfHEdQFzRaPeOFT4+D3AH4CfCHF9yq++ozA0/MGo/0=
   app: updatemanager-pyload
   on:
-    repo: GammaC0de/updatemanager
+    repo: pyload/updatemanager
     branch: master
     php: 7.1
   skip_cleanup: true
