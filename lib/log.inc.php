@@ -23,8 +23,8 @@ class Logger
         $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         foreach(explode(PHP_EOL, $message) as $line) {
             list($usec, $sec) = explode(" ", microtime());
-            $usec = str_replace("0.", ".", $usec);
-            $syslog_message = "<22>" . date('M d H:i:s', $sec) . $usec . ' ' . $program . ' ' . $component . ': ' . $line;
+            $date = date('M d H:i:s', $sec) . str_replace("0.", ".", $usec);
+            $syslog_message = "<22>" . $date . ' ' . $program . ' ' . $component . ': ' . $line;
             socket_sendto($sock, $syslog_message, strlen($syslog_message), 0, RSYSLOG_SERVER, RSYSLOG_PORT);
         }
         socket_close($sock);
